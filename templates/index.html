@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CureVerse - AI Health Assistant</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .btn_one i {
+            padding: 0;
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+            position: absolute;
+            left: 10px;
+            line-height: 60px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #1a5f7a, #66a6ff);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            max-width: 80%;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 20px;
+            position: relative;
+            clear: both;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background: #DCF8C6;
+            float: right;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: #E8E8E8;
+            float: left;
+            border-bottom-left-radius: 5px;
+        }
+
+        .feedback-buttons {
+            margin-top: 10px;
+        }
+
+        .feedback-button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .feedback-button:hover {
+            background: #66a6ff;
+        }
+
+        .suggestions {
+            padding: 15px;
+            background: #f0f0f0;
+            text-align: center;
+        }
+
+        .suggestion-btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .suggestion-btn:hover {
+            background: #66a6ff;
+            transform: scale(1.05);
+        }
+
+        .input-container {
+            display: flex;
+            padding: 20px;
+            background: white;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #1a5f7a;
+            border-radius: 30px;
+            outline: none;
+            font-size: 1em;
+        }
+
+        #send-button {
+            padding: 15px 30px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 30px;
+            background: #1a5f7a;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        #send-button:hover {
+            background: #66a6ff;
+        }
+
+        .remedy-block {
+            background: #F0F7FF;
+            border-left: 4px solid #1a5f7a;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            background: #1a5f7a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 10px;
+            float: left;
+        }
+
+        #loading-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #check {
+            display: none;
+        }
+
+        .sidebar_menu {
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            left: 1px;
+            height: 100vh;
+            width: 260px;
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+            left: -300px;
+        }
+
+        .sidebar_menu .logo {
+            position: absolute;
+            line-height: 80px;
+            width: 100%;
+            height: 90px;
+            text-align: center;
+            font-size: 20px;
+            top: 20px;
+        }
+
+        .sidebar_menu .btn_two {
+            font-weight: 300;
+            font-size: 20px;
+            line-height: 60px;
+            position: absolute;
+            top: 30px;
+            left: 230px;
+        }
+
+        .sidebar_menu .menu {
+            width: 100%;
+            position: absolute;
+            top: 97px;
+        }
+
+        .sidebar_menu .menu li {
+            color: black;
+            padding: 30px 20px;
+            list-style: none;
+        }
+
+        .sidebar_menu .menu i {
+            padding-right: 5px;
+        }
+
+        .sidebar_menu .menu li:hover {
+            box-shadow: 0 0 4px rgba(89, 89, 89, 0.8);
+        }
+
+        .sidebar_menu .btn_two:hover {
+            font-size: 25px;
+            transition: all 0.2s linear;
+        }
+
+        .btn_one i:hover {
+            font-size: 33px;
+            transition: all 0.2s linear;
+        }
+
+        #check:checked~.sidebar_menu {
+            left: 0;
+            transition: all 0.3s linear;
+        }
+
+        #check:checked~.btn_one {
+            opacity: 0;
+        }
+
+        .sidebar_menu .menu li button {
+            border: none;
+            background-color: rgba(255, 255, 255, 0);
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .response-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .response-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .response-content {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <input type="checkbox" id="check" />
+        <div class="btn_one">
+            <label for="check">
+                <i class="fa-solid fa-bars"></i>
+            </label>
+        </div>
+        <div class="sidebar_menu">
+            <div class="logo">
+                CureVerse
+            </div>
+            <div class="btn_two">
+                <label for="check">
+                    <i class="fa-solid fa-xmark"></i>
+                </label>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-trash"></i>
+                        <button id="clear-history">Clear Chat History </button>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-message"></i>
+                        customer care
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="header">
+            <h1>CureVerse</h1>
+            <p>Your AI Health Assistant</p>
+        </div>
+
+        <div class="chat-box" id="chat-box"></div>
+        <div id="loading-indicator">
+            <p>Loading...</p>
+        </div>
+        
+        <div class="suggestions" id="suggestions">
+            <button class="suggestion-btn" onclick="sendSuggestion('I have fever and headache')">Fever & Headache</button>
+            <button class="suggestion-btn" onclick="sendSuggestion('I have a cold and cough')">Cold & Cough</button>
+            <button class="suggestion-btn" onclick="sendSuggestion('I have stomach pain')">Stomach Pain</button>
+            <button class="suggestion-btn" onclick="sendSuggestion('I have joint pain')">Joint Pain</button>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Describe your symptoms..." />
+            <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        
+        <div class="response-container" id="response-container" style="display: none;">
+            <div id="causes" class="response-content">
+                <span class="response-title">Possible Causes:</span>
+                <p id="causes-text"></p>
+            </div>
+            <div id="consultation-advice" class="response-content">
+                <span class="response-title">Consultation Advice:</span>
+                <p id="consultation-advice-text"></p>
+            </div>
+            <div id="ayurvedic-remedies" class="response-content">
+                <span class="response-title">Ayurvedic Remedies:</span>
+                <p id="ayurvedic-remedies-text"></p>
+            </div>
+            <div id="diet-plan" class="response-content">
+                <span class="response-title">Diet Plan:</span>
+                <p id="diet-plan-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const responseContainer = document.getElementById('response-container');
+        const causesText = document.getElementById('causes-text');
+        const consultationAdviceText = document.getElementById('consultation-advice-text');
+        const ayurvedicRemediesText = document.getElementById('ayurvedic-remedies-text');
+        const dietPlanText = document.getElementById('diet-plan-text');
+
+        window.onload = function () {
+            appendMessage("Hello! I'm your AI health assistant. How can I help you today? You can click on the suggestion buttons above or type your symptoms.", 'bot-message');
+        };
+
+        socket.on('receive_message', function (response) {
+            loadingIndicator.style.display = 'none'; // Hide loading indicator
+            appendMessage(response.message, 'bot-message');
+            updateResponseSections(response); // Update response sections with data
+        });
+
+        sendButton.onclick = sendMessage;
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = userInput.value;
+            if (message) {
+                appendMessage(message, 'user-message');
+                loadingIndicator.style.display = 'block'; // Show loading indicator
+                socket.emit('send_message', { message: message });
+                userInput.value = ''; // Clear the input field
+            }
+        }
+
+        function sendSuggestion(suggestion) {
+            appendMessage(suggestion, 'user-message');
+            loadingIndicator.style.display = 'block'; // Show loading indicator
+            socket.emit('send_message', { message: suggestion });
+        }
+
+        function appendMessage(message, className) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+
+            if (className === 'bot-message') {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'bot-avatar';
+                avatarDiv.innerHTML = '<i class="fas fa-robot"></i>';
+                messageDiv.appendChild(avatarDiv);
+                messageDiv.textContent = message; // Set text content for bot messages
+            } else {
+                messageDiv.textContent = message; // Set text content for user messages
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom of the chat
+        }
+
+        function updateResponseSections(response) {
+            // Update the response sections with the data received
+            causesText.textContent = response.causes.join(', ') || 'No causes found.';
+            consultationAdviceText.textContent = response.consultationAdvice || 'No advice available.';
+            ayurvedicRemediesText.textContent = response.ayurvedicRemedies.join(', ') || 'No remedies found.';
+            dietPlanText.textContent = response.dietPlan.join(', ') || 'No diet plan available.';
+            responseContainer.style.display = 'block'; // Show the response container
+        }
+    </script>
+</body>
+
+</html>

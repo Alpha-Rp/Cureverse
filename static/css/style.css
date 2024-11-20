@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-container {
+    width: 90%;
+    max-width: 600px; /* Increased max-width for larger screens */
+    height: 80vh; /* Allow more height for the chat */
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent overflow */
+}
+
+.chat-header {
+    background: linear-gradient(135deg, #6e8efb 0%, #4a6ee0 100%);
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    text-align: center;
+    color: white;
+}
+
+.chat-header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.chat-header p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9f9f9; /* Light background for chat messages */
+    border-top: 1px solid #eee; /* Add a subtle border */
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+    position: relative; /* For positioning feedback buttons */
+}
+
+.bot-message {
+    background: #f0f2f5;
+    margin-right: auto;
+}
+
+.user-message {
+    background: #4a6ee0;
+    color: white;
+    margin-left: auto;
+}
+
+.error-message {
+    background: #ffcccc; /* Light red background for errors */
+    color: #d8000c; /* Dark red text color */
+    padding: 10px;
+    border-radius: 15px;
+    margin: 0 auto; /* Center error messages */
+}
+
+.feedback-buttons {
+    margin-top: 5px; /* Space between message and feedback buttons */
+}
+
+.feedback-button {
+    background: #4a6ee0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 12px;
+}
+
+.feedback-button:hover {
+    background: #3755b0;
+}
+
+.chat-input-container {
+    padding: 15px; /* Reduced padding for a tighter layout */
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    background: #ffffff; /* Ensure input area is white */
+}
+
+#user-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    font-size: 14px;
+    transition: border 0.3s;
+}
+
+#user-input:focus {
+    border-color: #4a6ee0; /* Change border color on focus */
+}
+
+button {
+    background: #4a6ee0;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s; /* Added transform for button effect */
+}
+
+button:hover {
+    background: #3755b0;
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+.history-control {
+    padding: 10px;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+}
+
+#clear-history {
+    padding: 8px 15px;
+    background: #1a5f7a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#clear-history:hover {
+    background: #66a6ff;
+    transform: scale(1.05);
+}
+
+.clear-history-icon {
+    font-size: 14px;
+}
