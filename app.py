@@ -191,6 +191,36 @@ def seasonal_wellness():
     season_name, season_data = get_current_season()
     return render_template("seasonal_wellness.html", season=season_name, season_data=season_data)
 
+@app.route("/remedy-library")
+@login_required
+def remedy_library():
+    user_name = session.get('user_name', 'User')
+    return render_template("remedy_library.html", user_name=user_name)
+
+@app.route("/health-library")
+@login_required
+def health_library():
+    user_name = session.get('user_name', 'User')
+    return render_template("health_library.html", user_name=user_name)
+
+@app.route("/find-doctor")
+@login_required
+def find_doctor():
+    user_name = session.get('user_name', 'User')
+    return render_template("find_doctor.html", user_name=user_name)
+
+@app.route("/preferences")
+@login_required
+def preferences():
+    user_name = session.get('user_name', 'User')
+    return render_template("preferences.html", user_name=user_name)
+
+@app.route("/help-support")
+@login_required
+def help_support():
+    user_name = session.get('user_name', 'User')
+    return render_template("help_support.html", user_name=user_name)
+
 # Authentication API routes
 @app.route("/api/register", methods=["POST"])
 def api_register():
