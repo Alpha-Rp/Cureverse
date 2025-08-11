@@ -1,0 +1,392 @@
+/* Ayurvedic Theme CSS */
+
+:root {
+  /* Dosha Colors */
+  --vata-color: #7986cb;
+  --vata-light: #aab6fe;
+  --vata-dark: #49599a;
+  
+  --pitta-color: #ef5350;
+  --pitta-light: #ff867c;
+  --pitta-dark: #b61827;
+  
+  --kapha-color: #66bb6a;
+  --kapha-light: #98ee99;
+  --kapha-dark: #338a3e;
+  
+  /* Ayurvedic Theme Colors */
+  --ayurveda-bg: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+  --ayurveda-accent: #d1c4e9;
+  --ayurveda-text: #37474f;
+  --ayurveda-card-bg: rgba(255, 255, 255, 0.9);
+  --ayurveda-border: #b39ddb;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* General Styles */
+.ayurveda-bg {
+  background: var(--ayurveda-bg);
+  color: var(--ayurveda-text);
+  min-height: 100vh;
+}
+
+/* Dosha Questionnaire Styles */
+.dosha-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.dosha-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.logo-container img {
+  width: 50px;
+  height: 50px;
+  margin-right: var(--spacing-sm);
+}
+
+.logo-container h1 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.dosha-header h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-dark);
+}
+
+.dosha-header p {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-sm);
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(to right, var(--vata-color), var(--pitta-color), var(--kapha-color));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* Questionnaire Container */
+.questionnaire-container {
+  background-color: var(--ayurveda-card-bg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.question-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* Question Cards */
+.question-card {
+  margin-bottom: var(--spacing-xl);
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.option-label {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--spacing-md);
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.option-label:hover {
+  background-color: #f5f5f5;
+  border-color: #d0d0d0;
+}
+
+.option-label input[type="radio"] {
+  margin-right: var(--spacing-md);
+  margin-top: 3px;
+}
+
+.option-text {
+  flex: 1;
+  line-height: 1.5;
+}
+
+/* Dosha Tags */
+.dosha-tag {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: var(--spacing-sm);
+  color: white;
+  font-weight: 600;
+}
+
+.vata-tag {
+  background-color: var(--vata-color);
+}
+
+.pitta-tag {
+  background-color: var(--pitta-color);
+}
+
+.kapha-tag {
+  background-color: var(--kapha-color);
+}
+
+/* Selected Option Styles */
+.option-label input[type="radio"]:checked + .option-text {
+  font-weight: 600;
+}
+
+.option-label input[type="radio"]:checked ~ .vata-tag {
+  background-color: var(--vata-dark);
+}
+
+.option-label input[type="radio"]:checked ~ .pitta-tag {
+  background-color: var(--pitta-dark);
+}
+
+.option-label input[type="radio"]:checked ~ .kapha-tag {
+  background-color: var(--kapha-dark);
+}
+
+.option-label input[type="radio"]:checked {
+  accent-color: var(--primary-color);
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-xl);
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.primary-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.secondary-btn {
+  background-color: #e0e0e0;
+  color: var(--text-color);
+}
+
+.secondary-btn:hover {
+  background-color: #d0d0d0;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Results Section */
+.results-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.dosha-chart-container {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.dosha-result {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.dosha-result h4 {
+  font-size: 1.3rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
+}
+
+#dosha-description {
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+}
+
+.recommendations-container {
+  background-color: #f9f9f9;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+}
+
+.recommendations-container h4 {
+  font-size: 1.2rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.recommendation-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.recommendation-section:last-child {
+  margin-bottom: 0;
+}
+
+.recommendation-section h5 {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.recommendation-section ul {
+  list-style-type: none;
+  padding-left: var(--spacing-lg);
+}
+
+.recommendation-section li {
+  position: relative;
+  padding-left: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.5;
+}
+
+.recommendation-section li:before {
+  content: "•";
+  position: absolute;
+  left: -15px;
+  color: var(--primary-color);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.action-buttons .btn {
+  min-width: 150px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* Footer */
+.dosha-footer {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.dosha-footer p {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .results-container {
+    grid-template-columns: 1fr 2fr;
+  }
+  
+  .dosha-chart-container {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 576px) {
+  .dosha-container {
+    padding: var(--spacing-md);
+  }
+  
+  .questionnaire-container {
+    padding: var(--spacing-md);
+  }
+  
+  .question-text {
+    font-size: 1.1rem;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}

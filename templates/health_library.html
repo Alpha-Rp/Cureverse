@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Library - CureVerse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <style>
+      /* Missing sidebar styles */
+      .tagline {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      .sidebar-footer {
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .user-details {
+        color: white;
+      }
+
+      .user-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .logout-btn {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        text-decoration: none;
+      }
+
+      .logout-btn:hover {
+        color: #e74c3c;
+      }
+
+      /* Fix main content layout and scrolling */
+      .main-content {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: calc(90vh - 40px) !important;
+        padding: 2rem;
+        padding-bottom: 4rem !important;
+        box-sizing: border-box;
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #2d5016 #f1f1f1;
+      }
+
+      /* Webkit scrollbar styling */
+      .main-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .main-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb {
+        background: #2d5016;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb:hover {
+        background: #1a2f0d;
+      }
+
+      /* Ensure the app container allows proper scrolling */
+      .app-container {
+        height: 90vh !important;
+        overflow: hidden !important;
+      }
+
+      /* Center the header content */
+      .content-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .content-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .library-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        padding-bottom: 4rem; /* Increased bottom padding for better scrolling */
+        margin-bottom: 2rem;
+      }
+
+      .article-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .article-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+      }
+
+      .article-content {
+        padding: 1.5rem;
+      }
+
+      .article-category {
+        background: rgba(45, 80, 22, 0.1);
+        color: #2d5016;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+
+      .article-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2d5016;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+      }
+
+      .article-excerpt {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .article-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #888;
+      }
+
+      .read-time {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .categories-filter {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+
+      .category-btn {
+        background: #f1f8e9;
+        color: #2d5016;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 25px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .category-btn:hover,
+      .category-btn.active {
+        background: #2d5016;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .search-section {
+        margin-bottom: 2rem;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        display: block;
+        padding: 1rem 1.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #2d5016;
+      }
+
+      .featured-section {
+        background: linear-gradient(135deg, #f1f8e9, #e8f5e8);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+
+      .featured-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2d5016;
+        margin-bottom: 1rem;
+      }
+
+      .featured-description {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+
+      .featured-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d5016;
+        display: block;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Health Library Responsive Styles */
+      @media (max-width: 768px) {
+        .main-content {
+          height: calc(100vh - 70px) !important;
+        }
+
+        .featured-section {
+          border-radius: 12px;
+        }
+
+        .search-input {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          height: calc(100vh - 60px) !important;
+          padding: 0.5rem;
+        }
+
+        .content-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .featured-section {
+          padding: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .categories-filter {
+          gap: 0.3rem;
+        }
+
+        .category-btn {
+          padding: 0.3rem 0.6rem;
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="CureVerse"
+            />
+            <h1>CureVerse</h1>
+          </div>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <p class="tagline">Your AI Health Assistant</p>
+        </div>
+
+        <nav class="sidebar-menu">
+          <div class="menu-section">
+            <h3 class="menu-title">AI ASSISTANT</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/" class="menu-link">
+                  <i class="fas fa-robot"></i>
+                  <span>AI Chatbot</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">AYURVEDIC TOOLS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/dosha-analysis" class="menu-link">
+                  <i class="fas fa-balance-scale"></i>
+                  <span>Dosha Analysis</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/seasonal-wellness" class="menu-link">
+                  <i class="fas fa-leaf"></i>
+                  <span>Seasonal Wellness</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/remedy-library" class="menu-link">
+                  <i class="fas fa-mortar-pestle"></i>
+                  <span>Remedy Library</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">RESOURCES</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/health-library" class="menu-link active">
+                  <i class="fas fa-book-medical"></i>
+                  <span>Health Library</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/find-doctor" class="menu-link">
+                  <i class="fas fa-user-md"></i>
+                  <span>Find a Doctor</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">SETTINGS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="#" class="menu-link" onclick="clearChatHistory()">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Clear Chat History</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/preferences" class="menu-link">
+                  <i class="fas fa-cog"></i>
+                  <span>Preferences</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/help-support" class="menu-link">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ user_name }}</div>
+              <div class="user-status">Premium Member</div>
+            </div>
+          </div>
+          <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-header">
+          <h1>Health Library</h1>
+          <p>
+            Comprehensive collection of Ayurvedic knowledge and modern health
+            insights
+          </p>
+        </div>
+
+        <div class="featured-section">
+          <h2 class="featured-title">
+            Your Gateway to Holistic Health Knowledge
+          </h2>
+          <p class="featured-description">
+            Explore our curated collection of articles, research papers, and
+            guides on Ayurvedic medicine, natural healing, and modern wellness
+            practices.
+          </p>
+
+          <div class="featured-stats">
+            <div class="stat-item">
+              <span class="stat-number">500+</span>
+              <div class="stat-label">Articles</div>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">50+</span>
+              <div class="stat-label">Research Papers</div>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">25+</span>
+              <div class="stat-label">Expert Authors</div>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">100K+</span>
+              <div class="stat-label">Readers</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-section">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search articles, topics, or conditions..."
+            id="searchInput"
+          />
+        </div>
+
+        <div class="categories-filter">
+          <button class="category-btn active" data-category="all">
+            All Topics
+          </button>
+          <button class="category-btn" data-category="ayurveda">
+            Ayurveda Basics
+          </button>
+          <button class="category-btn" data-category="doshas">Doshas</button>
+          <button class="category-btn" data-category="herbs">
+            Medicinal Herbs
+          </button>
+          <button class="category-btn" data-category="nutrition">
+            Nutrition
+          </button>
+          <button class="category-btn" data-category="lifestyle">
+            Lifestyle
+          </button>
+          <button class="category-btn" data-category="meditation">
+            Meditation
+          </button>
+          <button class="category-btn" data-category="yoga">Yoga</button>
+        </div>
+
+        <div class="library-grid" id="libraryGrid">
+          <!-- Articles will be loaded here -->
+        </div>
+
+        <!-- Bottom spacer to ensure last cards are fully visible -->
+        <div style="height: 100px"></div>
+      </div>
+    </div>
+
+    <script>
+      // Sample articles data
+      const articles = [
+        {
+          id: 1,
+          title: "Introduction to Ayurveda: Ancient Wisdom for Modern Life",
+          category: "ayurveda",
+          excerpt:
+            "Discover the foundational principles of Ayurveda, the 5000-year-old system of natural healing that originated in India.",
+          icon: "🕉️",
+          readTime: "10 min read",
+          date: "2025-01-20",
+        },
+        {
+          id: 2,
+          title: "The Five Elements in Ayurvedic Philosophy",
+          category: "ayurveda",
+          excerpt:
+            "Learn about Panchamahabhuta - the five elements (earth, water, fire, air, space) that form the foundation of Ayurvedic medicine.",
+          icon: "🌍",
+          readTime: "7 min read",
+          date: "2025-01-18",
+        },
+        {
+          id: 3,
+          title: "Understanding Your Dosha: A Complete Guide",
+          category: "doshas",
+          excerpt:
+            "Learn about the three doshas - Vata, Pitta, and Kapha - and how they influence your physical and mental characteristics.",
+          icon: "⚖️",
+          readTime: "8 min read",
+          date: "2025-01-15",
+        },
+        {
+          id: 4,
+          title: "The Power of Turmeric in Ayurvedic Medicine",
+          category: "herbs",
+          excerpt:
+            "Discover the incredible healing properties of turmeric and how this golden spice can transform your health.",
+          icon: "🌿",
+          readTime: "6 min read",
+          date: "2025-01-12",
+        },
+        {
+          id: 5,
+          title: "Seasonal Eating According to Ayurveda",
+          category: "nutrition",
+          excerpt:
+            "Learn how to align your diet with the seasons for optimal health and digestion according to Ayurvedic principles.",
+          icon: "🍃",
+          readTime: "10 min read",
+          date: "2025-01-10",
+        },
+        {
+          id: 6,
+          title: "Daily Routines for Balanced Living",
+          category: "lifestyle",
+          excerpt:
+            "Establish healthy daily routines (Dinacharya) that support your natural rhythms and promote overall wellness.",
+          icon: "🌅",
+          readTime: "7 min read",
+          date: "2025-01-08",
+        },
+        {
+          id: 7,
+          title: "Pranayama: The Science of Breath",
+          category: "meditation",
+          excerpt:
+            "Explore the ancient practice of pranayama and its profound effects on physical and mental health.",
+          icon: "🧘",
+          readTime: "9 min read",
+          date: "2025-01-05",
+        },
+        {
+          id: 8,
+          title: "Yoga Poses for Each Dosha Type",
+          category: "yoga",
+          excerpt:
+            "Discover which yoga poses are most beneficial for your dosha type and create a personalized practice.",
+          icon: "🧘‍♀️",
+          readTime: "12 min read",
+          date: "2025-01-03",
+        },
+        {
+          id: 9,
+          title: "Ayurvedic Body Types and Constitution",
+          category: "ayurveda",
+          excerpt:
+            "Understand your unique Ayurvedic constitution (Prakriti) and how it influences your health, behavior, and lifestyle choices.",
+          icon: "👤",
+          readTime: "9 min read",
+          date: "2025-01-16",
+        },
+      ];
+
+      let filteredArticles = [...articles];
+
+      function loadArticles() {
+        const grid = document.getElementById("libraryGrid");
+        grid.innerHTML = "";
+
+        filteredArticles.forEach(article => {
+          const card = createArticleCard(article);
+          grid.appendChild(card);
+        });
+      }
+
+      function createArticleCard(article) {
+        const card = document.createElement("div");
+        card.className = "article-card";
+        card.onclick = () => openArticle(article.id);
+
+        card.innerHTML = `
+                <div class="article-image">
+                    ${article.icon}
+                </div>
+                <div class="article-content">
+                    <span class="article-category">${article.category.toUpperCase()}</span>
+                    <h3 class="article-title">${article.title}</h3>
+                    <p class="article-excerpt">${article.excerpt}</p>
+                    <div class="article-meta">
+                        <span class="read-time">
+                            <i class="fas fa-clock"></i>
+                            ${article.readTime}
+                        </span>
+                        <span class="article-date">${formatDate(
+                          article.date
+                        )}</span>
+                    </div>
+                </div>
+            `;
+
+        return card;
+      }
+
+      function filterArticles(category) {
+        if (category === "all") {
+          filteredArticles = [...articles];
+        } else {
+          filteredArticles = articles.filter(
+            article => article.category === category
+          );
+        }
+        loadArticles();
+      }
+
+      function searchArticles(query) {
+        const lowerQuery = query.toLowerCase();
+        filteredArticles = articles.filter(
+          article =>
+            article.title.toLowerCase().includes(lowerQuery) ||
+            article.excerpt.toLowerCase().includes(lowerQuery) ||
+            article.category.toLowerCase().includes(lowerQuery)
+        );
+        loadArticles();
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+
+      function openArticle(articleId) {
+        alert(
+          `Opening article ${articleId}. This would navigate to the full article page.`
+        );
+      }
+
+      function clearChatHistory() {
+        if (confirm("Are you sure you want to clear your chat history?")) {
+          fetch("/api/user/clear-chat-history", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Chat history cleared successfully!");
+              } else {
+                alert("Failed to clear chat history.");
+              }
+            });
+        }
+      }
+
+      function toggleMobileMenu() {
+        const menu = document.querySelector(".sidebar-menu");
+        menu.classList.toggle("mobile-open");
+      }
+
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", () => {
+        loadArticles();
+
+        // Category filter buttons
+        document.querySelectorAll(".category-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll(".category-btn")
+              .forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            filterArticles(btn.dataset.category);
+          });
+        });
+
+        // Search functionality
+        document.getElementById("searchInput").addEventListener("input", e => {
+          searchArticles(e.target.value);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dosha Analysis - CureVerse</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/ayurveda.css') }}"
+    />
+  </head>
+  <body class="ayurveda-bg">
+  <div class="dosha-container">
+    <header class="dosha-header">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="CureVerse Logo">
+        <h1>CureVerse</h1>
+      </div>
+      <h2>Discover Your Dosha Type</h2>
+      <p>In Ayurveda, your unique mind-body constitution is determined by three doshas: Vata, Pitta, and Kapha. Understanding your dominant dosha can help you make lifestyle choices that promote balance and well-being.</p>
+    </header>
+
+        <div class="dosha-container">
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress" id="questionnaire-progress"></div>
+            </div>
+            <div class="progress-text">
+              Question <span id="current-question">1</span> of
+              <span id="total-questions">8</span>
+            </div>
+          </div>
+
+          <div class="questionnaire-container">
+            <form id="dosha-form">
+              <!-- Physical Characteristics Section -->
+              <div class="question-section" id="physical-section">
+                <h3>Physical Characteristics</h3>
+
+                <div class="question-card" data-question="physical_0">
+                  <div class="question-text">Body frame:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="physical_0" value="a" />
+                      <span class="option-text"
+                        >I am thin, lanky, and slender with prominent joints and
+                        thin muscles.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_0" value="b" />
+                      <span class="option-text"
+                        >I have a medium, symmetrical build with good muscle
+                        development.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_0" value="c" />
+                      <span class="option-text"
+                        >I have a large, sturdy build. My frame is broad with
+                        well-developed bodies and muscles.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="question-card" data-question="physical_1">
+                  <div class="question-text">Weight:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="physical_1" value="a" />
+                      <span class="option-text"
+                        >I am underweight and find it difficult to gain
+                        weight.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_1" value="b" />
+                      <span class="option-text"
+                        >I maintain my weight easily, fluctuating little.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_1" value="c" />
+                      <span class="option-text"
+                        >I gain weight easily and have difficulty losing
+                        it.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="question-card" data-question="physical_2">
+                  <div class="question-text">Skin:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="physical_2" value="a" />
+                      <span class="option-text"
+                        >My skin is dry, thin, or rough.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_2" value="b" />
+                      <span class="option-text"
+                        >My skin is warm, reddish, and prone to
+                        irritation.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_2" value="c" />
+                      <span class="option-text"
+                        >My skin is thick, moist, and smooth.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="question-card" data-question="physical_3">
+                  <div class="question-text">Appetite:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="physical_3" value="a" />
+                      <span class="option-text">Irregular and variable.</span>
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_3" value="b" />
+                      <span class="option-text">Strong and predictable.</span>
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="physical_3" value="c" />
+                      <span class="option-text"
+                        >Moderate but constant, can skip meals easily.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mental Characteristics Section -->
+              <div
+                class="question-section"
+                id="mental-section"
+                style="display: none"
+              >
+                <h3>Mental Characteristics</h3>
+
+                <div class="question-card" data-question="mental_0">
+                  <div class="question-text">Under stress, I tend to:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="mental_0" value="a" />
+                      <span class="option-text"
+                        >Feel anxious, worried, or overwhelmed.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_0" value="b" />
+                      <span class="option-text"
+                        >Become irritable, frustrated, or angry.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_0" value="c" />
+                      <span class="option-text"
+                        >Withdraw, become stubborn, or complacent.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="question-card" data-question="mental_1">
+                  <div class="question-text">My mind is usually:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="mental_1" value="a" />
+                      <span class="option-text"
+                        >Active, creative, and sometimes restless.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_1" value="b" />
+                      <span class="option-text"
+                        >Focused, determined, and ambitious.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_1" value="c" />
+                      <span class="option-text"
+                        >Calm, steady, and sometimes slow to engage.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="question-card" data-question="mental_2">
+                  <div class="question-text">When learning something new:</div>
+                  <div class="options-container">
+                    <label class="option-label">
+                      <input type="radio" name="mental_2" value="a" />
+                      <span class="option-text"
+                        >I learn quickly but may forget quickly too.</span
+                      >
+                      <span class="dosha-tag vata-tag">Vata</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_2" value="b" />
+                      <span class="option-text"
+                        >I learn at a moderate pace and retain information
+                        well.</span
+                      >
+                      <span class="dosha-tag pitta-tag">Pitta</span>
+                    </label>
+
+                    <label class="option-label">
+                      <input type="radio" name="mental_2" value="c" />
+                      <span class="option-text"
+                        >I learn slowly but have excellent long-term
+                        memory.</span
+                      >
+                      <span class="dosha-tag kapha-tag">Kapha</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Results Section (initially hidden) -->
+              <div id="results-section" style="display: none">
+                <h3>Your Dosha Analysis</h3>
+                <div class="results-container">
+                  <div class="dosha-chart-container">
+                    <canvas id="dosha-chart"></canvas>
+                  </div>
+
+                  <div class="dosha-result">
+                    <h4>
+                      Your Predominant Dosha:
+                      <span id="predominant-dosha">Loading...</span>
+                    </h4>
+                    <div id="dosha-description"></div>
+                  </div>
+
+                  <div class="recommendations-container">
+                    <h4>Personalized Recommendations</h4>
+
+                    <div class="recommendation-section">
+                      <h5>
+                        <i class="fas fa-utensils"></i> Dietary Recommendations
+                      </h5>
+                      <ul id="diet-recommendations"></ul>
+                    </div>
+
+                    <div class="recommendation-section">
+                      <h5>
+                        <i class="fas fa-spa"></i> Lifestyle Recommendations
+                      </h5>
+                      <ul id="lifestyle-recommendations"></ul>
+                    </div>
+
+                    <div class="recommendation-section">
+                      <h5><i class="fas fa-leaf"></i> Beneficial Herbs</h5>
+                      <ul id="herb-recommendations"></ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="action-buttons">
+                  <a href="/" class="btn primary-btn">Return to Chat</a>
+                  <button
+                    type="button"
+                    id="retake-btn"
+                    class="btn secondary-btn"
+                  >
+                    Retake Questionnaire
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="navigation-buttons">
+              <button
+                type="button"
+                id="prev-btn"
+                class="btn secondary-btn"
+                disabled
+              >
+                Previous
+              </button>
+              <button type="button" id="next-btn" class="btn primary-btn">
+                Next
+              </button>
+              <button
+                type="button"
+                id="submit-btn"
+                class="btn primary-btn"
+                style="display: none"
+              >
+                See Results
+              </button>
+      </div>
+    </div>
+
+    <footer class="dosha-footer">
+      <p>© 2023 CureVerse - Ayurvedic Health Assistant</p>
+      <p><small>Disclaimer: This questionnaire is for educational purposes only and is not a substitute for professional medical advice.</small></p>
+    </footer>
+  </div>
+
+  <!-- Chart.js for dosha visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- JavaScript -->
+  <script src="{{ url_for('static', filename='js/dosha.js') }}"></script>
+</body>
+</html>

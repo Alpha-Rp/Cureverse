@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seasonal Wellness - CureVerse</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/ayurveda.css') }}"
+    />
+    <style>
+      .seasonal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: var(--spacing-lg);
+      }
+
+      .season-banner {
+        height: 200px;
+        border-radius: var(--border-radius-lg);
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        margin-bottom: var(--spacing-xl);
+        overflow: hidden;
+      }
+
+      .season-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0.3) 100%
+        );
+        display: flex;
+        align-items: center;
+        padding: var(--spacing-xl);
+      }
+
+      .season-title {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .season-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+      }
+
+      .season-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        margin-top: 2rem;
+      }
+
+      .season-card {
+        background-color: var(--ayurveda-card-bg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-xl);
+        border-left: 5px solid var(--primary-color);
+      }
+
+      .season-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+      }
+
+      .season-card p {
+        line-height: 1.6;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .recommendation-list {
+        list-style-type: none;
+        padding-left: var(--spacing-md);
+      }
+
+      .recommendation-list li {
+        position: relative;
+        padding-left: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.6;
+      }
+
+      .recommendation-list li:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--primary-color);
+      }
+
+      .herb-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-md);
+      }
+
+      .herb-item {
+        background-color: #f5f5f5;
+        border-radius: var(--border-radius-md);
+        padding: var(--spacing-md);
+        text-align: center;
+        transition: all 0.2s ease;
+      }
+
+      .herb-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .herb-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .herb-name {
+        font-weight: 600;
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-xl);
+      }
+
+      .action-buttons .btn {
+        min-width: 150px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .spring-theme {
+        --season-color: var(--kapha-color);
+      }
+      .summer-theme {
+        --season-color: var(--pitta-color);
+      }
+      .autumn-theme {
+        --season-color: var(--vata-color);
+      }
+      .winter-theme {
+        --season-color: #5d8aa8;
+      }
+
+      .spring-bg {
+        background-image: url("https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+      }
+      .summer-bg {
+        background-image: url("https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+      }
+      .autumn-bg {
+        background-image: url("https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+      }
+      .winter-bg {
+        background-image: url("https://images.unsplash.com/photo-1418985991508-e47386d96a71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+      }
+
+      @media (min-width: 768px) {
+        .season-content {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .seasonal-container {
+          padding: var(--spacing-md);
+        }
+
+        .season-banner {
+          height: 150px;
+        }
+
+        .season-title {
+          font-size: 2rem;
+        }
+
+        .season-subtitle {
+          font-size: 1rem;
+        }
+
+        .season-card {
+          padding: var(--spacing-md);
+        }
+      }
+    </style>
+  </head>
+  <body class="ayurveda-bg {{ season }}-theme">
+    <div class="seasonal-container">
+      <header>
+        <div
+          class="logo-container"
+          style="justify-content: flex-start; margin-bottom: 20px"
+        >
+          <a
+            href="/"
+            style="display: flex; align-items: center; text-decoration: none"
+          >
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="CureVerse Logo"
+              style="width: 40px; height: 40px; margin-right: 10px"
+            />
+            <h1 style="color: var(--primary-color); font-size: 1.5rem">
+              CureVerse
+            </h1>
+          </a>
+        </div>
+
+        <div class="season-banner {{ season }}-bg">
+          <div class="season-overlay">
+            <div>
+              <h1 class="season-title">{{ season|capitalize }} Wellness</h1>
+              <p class="season-subtitle">
+                Ayurvedic recommendations for optimal health during {{ season }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="season-content">
+        <div class="season-card">
+          <h3><i class="fas fa-info-circle"></i> Seasonal Characteristics</h3>
+          <p>{{ season_data.characteristics }}</p>
+          <p>
+            During {{ season }}, the predominant dosha is
+            <strong>{{ season_data.predominant_dosha|capitalize }}</strong>.
+            This means you may experience an increase in {{
+            season_data.predominant_dosha }} qualities in your body and mind.
+          </p>
+        </div>
+
+        <div class="season-card">
+          <h3><i class="fas fa-utensils"></i> Dietary Recommendations</h3>
+          <p>Adjust your diet during {{ season }} to maintain balance:</p>
+          <ul class="recommendation-list">
+            {% for recommendation in season_data.dietary_recommendations %}
+            <li>{{ recommendation }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="season-card">
+          <h3><i class="fas fa-walking"></i> Lifestyle Recommendations</h3>
+          <p>Modify your daily routine to stay balanced this {{ season }}:</p>
+          <ul class="recommendation-list">
+            {% for recommendation in season_data.lifestyle_recommendations %}
+            <li>{{ recommendation }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="season-card">
+          <h3><i class="fas fa-leaf"></i> Beneficial Herbs & Spices</h3>
+          <p>
+            These herbs and spices are particularly beneficial during {{ season
+            }}:
+          </p>
+          <div class="herb-grid">
+            {% for herb in season_data.herbs_and_spices %}
+            <div class="herb-item">
+              <div class="herb-icon">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div class="herb-name">{{ herb }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </main>
+
+      <div class="action-buttons">
+        <a href="/" class="btn primary-btn">Return to Chat</a>
+        <a href="/dosha-analysis" class="btn secondary-btn"
+          >Discover Your Dosha</a
+        >
+      </div>
+
+      <footer class="dosha-footer">
+        <p>© 2023 CureVerse - Ayurvedic Health Assistant</p>
+        <p>
+          <small
+            >Disclaimer: These recommendations are for educational purposes only
+            and are not a substitute for professional medical advice.</small
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

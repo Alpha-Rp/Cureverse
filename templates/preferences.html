@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preferences - CureVerse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <style>
+      /* Missing sidebar styles */
+      .tagline {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      .sidebar-footer {
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .user-details {
+        color: white;
+      }
+
+      .user-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .logout-btn {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        text-decoration: none;
+      }
+
+      .logout-btn:hover {
+        color: #e74c3c;
+      }
+
+      /* Fix main content layout and scrolling */
+      .main-content {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: calc(90vh - 40px) !important;
+        padding: 2rem;
+        padding-bottom: 4rem !important;
+        box-sizing: border-box;
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #2d5016 #f1f1f1;
+      }
+
+      /* Webkit scrollbar styling */
+      .main-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .main-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb {
+        background: #2d5016;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb:hover {
+        background: #1a2f0d;
+      }
+
+      /* Ensure the app container allows proper scrolling */
+      .app-container {
+        height: 90vh !important;
+        overflow: hidden !important;
+      }
+
+      /* Center the header content */
+      .content-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .content-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .preferences-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .preference-section {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2d5016;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .preference-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .preference-item:last-child {
+        border-bottom: none;
+      }
+
+      .preference-info {
+        flex: 1;
+      }
+
+      .preference-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.25rem;
+      }
+
+      .preference-description {
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        background: #ddd;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .toggle-switch.active {
+        background: #2d5016;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle-switch.active .toggle-slider {
+        transform: translateX(30px);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-input,
+      .form-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-input:focus,
+      .form-select:focus {
+        outline: none;
+        border-color: #2d5016;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #2d5016;
+        border: 2px solid #2d5016;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 1rem;
+      }
+
+      .btn-secondary:hover {
+        background: #2d5016;
+        color: white;
+      }
+
+      .danger-zone {
+        border: 2px solid #dc3545;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .danger-title {
+        color: #dc3545;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        display: none;
+      }
+
+      /* Preferences Responsive Styles */
+      @media (max-width: 768px) {
+        .main-content {
+          height: calc(100vh - 70px) !important;
+          padding: 1rem;
+        }
+
+        .preferences-container {
+          max-width: 100%;
+        }
+
+        .preference-section {
+          padding: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          height: calc(100vh - 60px) !important;
+          padding: 0.5rem;
+        }
+
+        .content-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .content-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .preference-section {
+          padding: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          font-size: 0.9rem;
+        }
+
+        .form-control {
+          padding: 0.6rem;
+          font-size: 0.85rem;
+        }
+
+        .btn-primary {
+          padding: 0.6rem 1rem;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="CureVerse"
+            />
+            <h1>CureVerse</h1>
+          </div>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <p class="tagline">Your AI Health Assistant</p>
+        </div>
+
+        <nav class="sidebar-menu">
+          <div class="menu-section">
+            <h3 class="menu-title">AI ASSISTANT</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/" class="menu-link">
+                  <i class="fas fa-robot"></i>
+                  <span>AI Chatbot</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">AYURVEDIC TOOLS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/dosha-analysis" class="menu-link">
+                  <i class="fas fa-balance-scale"></i>
+                  <span>Dosha Analysis</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/seasonal-wellness" class="menu-link">
+                  <i class="fas fa-leaf"></i>
+                  <span>Seasonal Wellness</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/remedy-library" class="menu-link">
+                  <i class="fas fa-mortar-pestle"></i>
+                  <span>Remedy Library</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">RESOURCES</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/health-library" class="menu-link">
+                  <i class="fas fa-book-medical"></i>
+                  <span>Health Library</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/find-doctor" class="menu-link">
+                  <i class="fas fa-user-md"></i>
+                  <span>Find a Doctor</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">SETTINGS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="#" class="menu-link" onclick="clearChatHistory()">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Clear Chat History</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/preferences" class="menu-link active">
+                  <i class="fas fa-cog"></i>
+                  <span>Preferences</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/help-support" class="menu-link">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ user_name }}</div>
+              <div class="user-status">Premium Member</div>
+            </div>
+          </div>
+          <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-header">
+          <h1>Preferences</h1>
+          <p>Customize your CureVerse experience</p>
+        </div>
+
+        <div class="preferences-container">
+          <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            Preferences saved successfully!
+          </div>
+
+          <!-- Profile Settings -->
+          <div class="preference-section">
+            <h2 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              Profile Settings
+            </h2>
+
+            <div class="form-group">
+              <label class="form-label">Display Name</label>
+              <input
+                type="text"
+                class="form-input"
+                id="displayName"
+                value="{{ user_name }}"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-input"
+                id="email"
+                placeholder="your.email@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Primary Dosha</label>
+              <select class="form-select" id="primaryDosha">
+                <option value="">Select your primary dosha</option>
+                <option value="vata">Vata</option>
+                <option value="pitta">Pitta</option>
+                <option value="kapha">Kapha</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="preference-section">
+            <h2 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-bell"></i>
+              </div>
+              Notifications
+            </h2>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <div class="preference-label">Daily Health Tips</div>
+                <div class="preference-description">
+                  Receive personalized Ayurvedic tips daily
+                </div>
+              </div>
+              <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <div class="preference-label">Seasonal Reminders</div>
+                <div class="preference-description">
+                  Get notified about seasonal health practices
+                </div>
+              </div>
+              <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <div class="preference-label">Remedy Suggestions</div>
+                <div class="preference-description">
+                  Receive suggestions for natural remedies
+                </div>
+              </div>
+              <div class="toggle-switch" onclick="toggleSwitch(this)">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Privacy Settings -->
+          <div class="preference-section">
+            <h2 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              Privacy & Data
+            </h2>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <div class="preference-label">Data Analytics</div>
+                <div class="preference-description">
+                  Help improve CureVerse by sharing usage data
+                </div>
+              </div>
+              <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+
+            <div class="preference-item">
+              <div class="preference-info">
+                <div class="preference-label">Personalized Recommendations</div>
+                <div class="preference-description">
+                  Use your data to provide better recommendations
+                </div>
+              </div>
+              <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                <div class="toggle-slider"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- App Settings -->
+          <div class="preference-section">
+            <h2 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              App Settings
+            </h2>
+
+            <div class="form-group">
+              <label class="form-label">Language</label>
+              <select class="form-select" id="language">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="sa">Sanskrit</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Theme</label>
+              <select class="form-select" id="theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="auto">Auto</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <div class="preference-section">
+            <button class="btn-secondary" onclick="resetPreferences()">
+              Reset to Default
+            </button>
+            <button class="btn-primary" onclick="savePreferences()">
+              Save Preferences
+            </button>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="danger-zone">
+            <h3 class="danger-title">
+              <i class="fas fa-exclamation-triangle"></i>
+              Danger Zone
+            </h3>
+            <p style="color: #666; margin-bottom: 1rem">
+              These actions are permanent and cannot be undone.
+            </p>
+            <button class="btn-danger" onclick="deleteAccount()">
+              Delete Account
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom spacer to ensure content is fully visible -->
+        <div style="height: 100px"></div>
+      </div>
+    </div>
+
+    <script>
+      function toggleSwitch(element) {
+        element.classList.toggle("active");
+      }
+
+      function savePreferences() {
+        // Collect all preference data
+        const preferences = {
+          displayName: document.getElementById("displayName").value,
+          email: document.getElementById("email").value,
+          primaryDosha: document.getElementById("primaryDosha").value,
+          language: document.getElementById("language").value,
+          theme: document.getElementById("theme").value,
+          notifications: {
+            dailyTips: document
+              .querySelectorAll(".toggle-switch")[0]
+              .classList.contains("active"),
+            seasonalReminders: document
+              .querySelectorAll(".toggle-switch")[1]
+              .classList.contains("active"),
+            remedySuggestions: document
+              .querySelectorAll(".toggle-switch")[2]
+              .classList.contains("active"),
+          },
+          privacy: {
+            dataAnalytics: document
+              .querySelectorAll(".toggle-switch")[3]
+              .classList.contains("active"),
+            personalizedRecommendations: document
+              .querySelectorAll(".toggle-switch")[4]
+              .classList.contains("active"),
+          },
+        };
+
+        // Show success message
+        const successMessage = document.getElementById("successMessage");
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 3000);
+
+        console.log("Saving preferences:", preferences);
+        // Here you would send the preferences to your backend
+      }
+
+      function resetPreferences() {
+        if (
+          confirm("Are you sure you want to reset all preferences to default?")
+        ) {
+          // Reset all form fields to default values
+          document.getElementById("displayName").value = "{{ user_name }}";
+          document.getElementById("email").value = "";
+          document.getElementById("primaryDosha").value = "";
+          document.getElementById("language").value = "en";
+          document.getElementById("theme").value = "light";
+
+          // Reset all toggles to default state
+          document
+            .querySelectorAll(".toggle-switch")
+            .forEach((toggle, index) => {
+              if (index < 2 || index === 3 || index === 4) {
+                toggle.classList.add("active");
+              } else {
+                toggle.classList.remove("active");
+              }
+            });
+
+          alert("Preferences reset to default values.");
+        }
+      }
+
+      function deleteAccount() {
+        if (
+          confirm(
+            "Are you sure you want to delete your account? This action cannot be undone."
+          )
+        ) {
+          if (
+            confirm(
+              "This will permanently delete all your data. Are you absolutely sure?"
+            )
+          ) {
+            alert("Account deletion would be processed here. This is a demo.");
+          }
+        }
+      }
+
+      function clearChatHistory() {
+        if (confirm("Are you sure you want to clear your chat history?")) {
+          fetch("/api/user/clear-chat-history", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Chat history cleared successfully!");
+              } else {
+                alert("Failed to clear chat history.");
+              }
+            });
+        }
+      }
+
+      function toggleMobileMenu() {
+        const menu = document.querySelector(".sidebar-menu");
+        menu.classList.toggle("mobile-open");
+      }
+    </script>
+  </body>
+</html>

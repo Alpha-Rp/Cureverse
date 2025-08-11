@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remedy Library - CureVerse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <style>
+      /* Missing sidebar styles */
+      .tagline {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      .sidebar-footer {
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .user-details {
+        color: white;
+      }
+
+      .user-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .logout-btn {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        text-decoration: none;
+      }
+
+      .logout-btn:hover {
+        color: #e74c3c;
+      }
+
+      /* Fix main content layout and scrolling */
+      .main-content {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: calc(90vh - 40px) !important;
+        padding: 2rem;
+        padding-bottom: 4rem !important;
+        box-sizing: border-box;
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #2d5016 #f1f1f1;
+      }
+
+      /* Webkit scrollbar styling */
+      .main-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .main-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb {
+        background: #2d5016;
+        border-radius: 4px;
+      }
+
+      .main-content::-webkit-scrollbar-thumb:hover {
+        background: #1a2f0d;
+      }
+
+      /* Ensure the app container allows proper scrolling */
+      .app-container {
+        height: 90vh !important;
+        overflow: hidden !important;
+      }
+
+      /* Center the header content */
+      .content-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .content-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .content-header p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .remedy-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        padding-bottom: 4rem; /* Increased bottom padding for better scrolling */
+        margin-bottom: 2rem;
+      }
+
+      .remedy-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .remedy-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .remedy-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .remedy-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      .remedy-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2d5016;
+        margin: 0;
+      }
+
+      .remedy-category {
+        background: rgba(45, 80, 22, 0.1);
+        color: #2d5016;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .remedy-description {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      .remedy-ingredients {
+        margin-bottom: 1.5rem;
+      }
+
+      .ingredients-title {
+        font-weight: 600;
+        color: #2d5016;
+        margin-bottom: 0.5rem;
+      }
+
+      .ingredients-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .ingredient-tag {
+        background: #f1f8e9;
+        color: #2d5016;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+      }
+
+      .remedy-benefits {
+        margin-bottom: 1.5rem;
+      }
+
+      .benefits-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .benefits-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: #666;
+      }
+
+      .benefits-list li::before {
+        content: "✓";
+        color: #52b788;
+        font-weight: bold;
+      }
+
+      .remedy-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #2d5016;
+        border: 2px solid #2d5016;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-secondary:hover {
+        background: #2d5016;
+        color: white;
+      }
+
+      .search-section {
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        max-width: 600px;
+        margin: 0 auto 1rem auto;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 1rem 1.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #2d5016;
+      }
+
+      .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .filter-tag {
+        background: #f1f8e9;
+        color: #2d5016;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+      }
+
+      .filter-tag:hover,
+      .filter-tag.active {
+        background: #2d5016;
+        color: white;
+      }
+
+      /* Remedy Library Responsive Styles */
+      @media (max-width: 768px) {
+        .main-content {
+          height: calc(100vh - 70px) !important;
+        }
+
+        .search-bar {
+          max-width: 100%;
+        }
+
+        .filter-tags {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          height: calc(100vh - 60px) !important;
+          padding: 0.5rem;
+        }
+
+        .content-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .search-section {
+          margin-bottom: 1rem;
+        }
+
+        .search-bar {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .filter-tags {
+          gap: 0.3rem;
+        }
+
+        .filter-tag {
+          padding: 0.3rem 0.6rem;
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="CureVerse"
+            />
+            <h1>CureVerse</h1>
+          </div>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <p class="tagline">Your AI Health Assistant</p>
+        </div>
+
+        <nav class="sidebar-menu">
+          <div class="menu-section">
+            <h3 class="menu-title">AI ASSISTANT</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/" class="menu-link">
+                  <i class="fas fa-robot"></i>
+                  <span>AI Chatbot</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">AYURVEDIC TOOLS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/dosha-analysis" class="menu-link">
+                  <i class="fas fa-balance-scale"></i>
+                  <span>Dosha Analysis</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/seasonal-wellness" class="menu-link">
+                  <i class="fas fa-leaf"></i>
+                  <span>Seasonal Wellness</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/remedy-library" class="menu-link active">
+                  <i class="fas fa-mortar-pestle"></i>
+                  <span>Remedy Library</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">RESOURCES</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/health-library" class="menu-link">
+                  <i class="fas fa-book-medical"></i>
+                  <span>Health Library</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/find-doctor" class="menu-link">
+                  <i class="fas fa-user-md"></i>
+                  <span>Find a Doctor</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">SETTINGS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="#" class="menu-link" onclick="clearChatHistory()">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Clear Chat History</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/preferences" class="menu-link">
+                  <i class="fas fa-cog"></i>
+                  <span>Preferences</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/help-support" class="menu-link">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ user_name }}</div>
+              <div class="user-status">Premium Member</div>
+            </div>
+          </div>
+          <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-header">
+          <h1>Remedy Library</h1>
+          <p>
+            Discover thousands of time-tested Ayurvedic remedies for natural
+            healing
+          </p>
+        </div>
+
+        <div class="search-section">
+          <div class="search-bar">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search remedies by name, ingredient, or condition..."
+            />
+            <button class="btn-primary">
+              <i class="fas fa-search"></i>
+              Search
+            </button>
+          </div>
+
+          <div class="filter-tags">
+            <div class="filter-tag active">All</div>
+            <div class="filter-tag">Digestive</div>
+            <div class="filter-tag">Respiratory</div>
+            <div class="filter-tag">Skin Care</div>
+            <div class="filter-tag">Mental Health</div>
+            <div class="filter-tag">Immunity</div>
+            <div class="filter-tag">Pain Relief</div>
+          </div>
+        </div>
+
+        <div class="remedy-grid" id="remedyGrid">
+          <!-- Remedies will be loaded here -->
+        </div>
+
+        <!-- Bottom spacer to ensure last cards are fully visible -->
+        <div style="height: 100px"></div>
+      </div>
+    </div>
+
+    <script>
+      // Sample remedy data
+      const remedies = [
+        {
+          title: "Ginger Tea for Digestion",
+          category: "Digestive",
+          icon: "🫖",
+          description:
+            "A warming tea that aids digestion, reduces nausea, and soothes the stomach.",
+          ingredients: ["Fresh Ginger", "Honey", "Lemon", "Hot Water"],
+          benefits: [
+            "Improves digestion",
+            "Reduces nausea",
+            "Boosts immunity",
+            "Anti-inflammatory",
+          ],
+          preparation:
+            "Steep fresh ginger slices in hot water for 10 minutes. Add honey and lemon to taste.",
+        },
+        {
+          title: "Turmeric Golden Milk",
+          category: "Immunity",
+          icon: "🥛",
+          description:
+            "A nourishing drink that boosts immunity and reduces inflammation.",
+          ingredients: [
+            "Turmeric",
+            "Milk",
+            "Honey",
+            "Black Pepper",
+            "Cinnamon",
+          ],
+          benefits: [
+            "Boosts immunity",
+            "Anti-inflammatory",
+            "Improves sleep",
+            "Antioxidant rich",
+          ],
+          preparation:
+            "Heat milk with turmeric, add a pinch of black pepper and cinnamon. Sweeten with honey.",
+        },
+        {
+          title: "Neem Face Pack",
+          category: "Skin Care",
+          icon: "🌿",
+          description:
+            "Natural antibacterial face pack for clear, healthy skin.",
+          ingredients: ["Neem Powder", "Rose Water", "Honey"],
+          benefits: [
+            "Fights acne",
+            "Purifies skin",
+            "Natural antiseptic",
+            "Reduces inflammation",
+          ],
+          preparation:
+            "Mix neem powder with rose water and honey to form a paste. Apply for 15 minutes.",
+        },
+      ];
+
+      function loadRemedies() {
+        const grid = document.getElementById("remedyGrid");
+        grid.innerHTML = "";
+
+        remedies.forEach(remedy => {
+          const card = createRemedyCard(remedy);
+          grid.appendChild(card);
+        });
+      }
+
+      function createRemedyCard(remedy) {
+        const card = document.createElement("div");
+        card.className = "remedy-card";
+
+        card.innerHTML = `
+                <div class="remedy-header">
+                    <div class="remedy-icon">${remedy.icon}</div>
+                    <div>
+                        <h3 class="remedy-title">${remedy.title}</h3>
+                        <span class="remedy-category">${remedy.category}</span>
+                    </div>
+                </div>
+                
+                <p class="remedy-description">${remedy.description}</p>
+                
+                <div class="remedy-ingredients">
+                    <div class="ingredients-title">Ingredients:</div>
+                    <div class="ingredients-list">
+                        ${remedy.ingredients
+                          .map(
+                            ingredient =>
+                              `<span class="ingredient-tag">${ingredient}</span>`
+                          )
+                          .join("")}
+                    </div>
+                </div>
+                
+                <div class="remedy-benefits">
+                    <div class="ingredients-title">Benefits:</div>
+                    <ul class="benefits-list">
+                        ${remedy.benefits
+                          .map(benefit => `<li>${benefit}</li>`)
+                          .join("")}
+                    </ul>
+                </div>
+                
+                <div class="remedy-actions">
+                    <button class="btn-primary" onclick="viewFullRecipe('${
+                      remedy.title
+                    }')">
+                        <i class="fas fa-eye"></i>
+                        View Recipe
+                    </button>
+                    <button class="btn-secondary" onclick="saveRemedy('${
+                      remedy.title
+                    }')">
+                        <i class="fas fa-bookmark"></i>
+                        Save
+                    </button>
+                </div>
+            `;
+
+        return card;
+      }
+
+      function viewFullRecipe(title) {
+        alert(`Opening full recipe for: ${title}`);
+      }
+
+      function saveRemedy(title) {
+        alert(`Saved remedy: ${title}`);
+      }
+
+      function clearChatHistory() {
+        if (confirm("Are you sure you want to clear your chat history?")) {
+          fetch("/api/user/clear-chat-history", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Chat history cleared successfully!");
+              } else {
+                alert("Failed to clear chat history.");
+              }
+            });
+        }
+      }
+
+      function toggleMobileMenu() {
+        const menu = document.querySelector(".sidebar-menu");
+        menu.classList.toggle("mobile-open");
+      }
+
+      // Load remedies on page load
+      document.addEventListener("DOMContentLoaded", loadRemedies);
+    </script>
+  </body>
+</html>

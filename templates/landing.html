@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CureVerse - Revolutionary Ayurvedic AI Health Assistant</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/landing.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+      <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+      <div class="gradient-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <img
+            src="{{ url_for('static', filename='img/logo.svg') }}"
+            alt="CureVerse Logo"
+            class="logo-img"
+          />
+          <span class="logo-text">CureVerse</span>
+        </div>
+        <div class="nav-menu" id="nav-menu">
+          <div class="nav-links">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#how-it-works" class="nav-link">How It Works</a>
+            <a href="#testimonials" class="nav-link">Reviews</a>
+          </div>
+          <div class="nav-cta">
+            <a href="/login" class="btn-secondary">Sign In</a>
+            <a href="/register" class="btn-primary">Get Started Free</a>
+          </div>
+        </div>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-seedling"></i>
+            <span
+              >5000+ Years of Wisdom • Powered by Modern AI • Trusted by
+              Thousands</span
+            >
+          </div>
+
+          <h1 class="hero-title">
+            Your Personal
+            <span class="gradient-text">Ayurvedic Health Companion</span>
+            Powered by AI
+          </h1>
+
+          <p class="hero-description">
+            Discover the perfect harmony of ancient Ayurvedic healing and modern
+            artificial intelligence. Get personalized health insights, natural
+            remedies, and holistic wellness guidance that adapts to your unique
+            constitution and lifestyle. Experience healthcare the way nature
+            intended.
+          </p>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-number" data-count="25000">0</div>
+              <div class="stat-label">Healing Journeys</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" data-count="150000">0</div>
+              <div class="stat-label">Natural Remedies Shared</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" data-count="98">0</div>
+              <div class="stat-label">% Success Rate</div>
+            </div>
+          </div>
+
+          <div class="hero-cta">
+            <a href="/register" class="btn-primary large">
+              <span>Begin Your Healing Journey</span>
+              <i class="fas fa-seedling"></i>
+            </a>
+            <a href="#how-it-works" class="btn-secondary large">
+              <i class="fas fa-heart"></i>
+              <span>Discover How It Works</span>
+            </a>
+          </div>
+
+          <div class="hero-trust">
+            <p>
+              Trusted by Ayurvedic practitioners and wellness enthusiasts
+              globally
+            </p>
+            <div class="trust-logos">
+              <div class="trust-logo">
+                <i class="fas fa-leaf"></i>
+                <span>100% Natural</span>
+              </div>
+              <div class="trust-logo">
+                <i class="fas fa-user-md"></i>
+                <span>Expert Verified</span>
+              </div>
+              <div class="trust-logo">
+                <i class="fas fa-lock"></i>
+                <span>Privacy Protected</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-image-container">
+            <!-- Main Visual Dashboard -->
+            <div class="hero-dashboard">
+              <div class="dashboard-header">
+                <div class="dashboard-title">
+                  <i class="fas fa-heartbeat"></i>
+                  <span>Your Health Dashboard</span>
+                </div>
+                <div class="dashboard-status">
+                  <div class="status-dot active"></div>
+                  <span>AI Active</span>
+                </div>
+              </div>
+
+              <!-- Health Metrics Cards -->
+              <div class="metrics-grid">
+                <div class="metric-card dosha-card">
+                  <div class="metric-icon">
+                    <i class="fas fa-yin-yang"></i>
+                  </div>
+                  <div class="metric-info">
+                    <h4>Dosha Type</h4>
+                    <p class="metric-value">Vata-Pitta</p>
+                    <span class="metric-status balanced">Balanced</span>
+                  </div>
+                </div>
+
+                <div class="metric-card wellness-card">
+                  <div class="metric-icon">
+                    <i class="fas fa-leaf"></i>
+                  </div>
+                  <div class="metric-info">
+                    <h4>Wellness Score</h4>
+                    <p class="metric-value">92%</p>
+                    <span class="metric-status excellent">Excellent</span>
+                  </div>
+                </div>
+
+                <div class="metric-card remedy-card">
+                  <div class="metric-icon">
+                    <i class="fas fa-seedling"></i>
+                  </div>
+                  <div class="metric-info">
+                    <h4>Active Remedies</h4>
+                    <p class="metric-value">3</p>
+                    <span class="metric-status active">In Progress</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Chat Preview -->
+              <div class="chat-preview">
+                <div class="chat-header">
+                  <i class="fas fa-robot"></i>
+                  <span>AI Health Assistant</span>
+                </div>
+                <div class="chat-messages">
+                  <div class="chat-message user">
+                    <div class="message-bubble">
+                      I have a headache and feel tired
+                    </div>
+                  </div>
+                  <div class="chat-message ai">
+                    <div class="message-bubble">
+                      Based on your Vata constitution, I recommend ginger tea
+                      and gentle head massage...
+                    </div>
+                  </div>
+                </div>
+                <div class="chat-typing">
+                  <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <span>AI is analyzing...</span>
+                </div>
+              </div>
+
+              <!-- Decorative Elements -->
+              <div class="dashboard-decoration">
+                <div class="floating-leaf leaf-1">🌿</div>
+                <div class="floating-leaf leaf-2">🍃</div>
+                <div class="floating-leaf leaf-3">🌱</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <div class="scroll-arrow">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">
+            <i class="fas fa-om"></i>
+            <span>Why Choose CureVerse</span>
+          </div>
+          <h2 class="section-title">
+            Where Ancient Wisdom Meets Modern Intelligence
+          </h2>
+          <p class="section-description">
+            Experience the transformative power of 5000-year-old Ayurvedic
+            healing enhanced by cutting-edge artificial intelligence for
+            personalized wellness
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-brain"></i>
+              </div>
+            </div>
+            <h3>Intelligent Health Analysis</h3>
+            <p>
+              Our advanced AI understands your symptoms in natural language and
+              provides personalized Ayurvedic insights based on your unique
+              constitution and health patterns.
+            </p>
+            <div class="feature-link">
+              <span>Discover More</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-leaf"></i>
+              </div>
+            </div>
+            <h3>Personalized Herbal Solutions</h3>
+            <p>
+              Discover thousands of time-tested natural remedies, carefully
+              selected and customized for your dosha type, current health state,
+              and seasonal needs.
+            </p>
+            <div class="feature-link">
+              <span>Explore Remedies</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+            </div>
+            <h3>Dosha Balance</h3>
+            <p>
+              Comprehensive constitutional analysis to understand your Vata,
+              Pitta, and Kapha balance for optimal health.
+            </p>
+            <div class="feature-link">
+              <span>Take Assessment</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+            </div>
+            <h3>Seasonal Wellness</h3>
+            <p>
+              Adaptive health recommendations that change with seasons, weather,
+              and your body's natural rhythms.
+            </p>
+            <div class="feature-link">
+              <span>View Calendar</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <h3>Progress Tracking</h3>
+            <p>
+              Monitor your health journey with detailed analytics, symptom
+              tracking, and improvement insights.
+            </p>
+            <div class="feature-link">
+              <span>See Dashboard</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+            <div class="feature-icon">
+              <div class="icon-bg">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+            </div>
+            <h3>24/7 Accessibility</h3>
+            <p>
+              Get instant health guidance anytime, anywhere with our responsive
+              web app and mobile-optimized interface.
+            </p>
+            <div class="feature-link">
+              <span>Try Now</span>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">
+            <i class="fas fa-spa"></i>
+            <span>Your Healing Journey</span>
+          </div>
+          <h2 class="section-title">Your Path to Natural Wellness</h2>
+          <p class="section-description">
+            Experience the seamless blend of ancient wisdom and modern
+            technology in just three simple steps to transform your health
+            naturally
+          </p>
+        </div>
+
+        <div class="process-steps">
+          <div class="step" data-aos="fade-right" data-aos-delay="100">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <div class="step-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h3>Discover Your Constitution</h3>
+              <p>
+                Begin with our comprehensive dosha assessment that reveals your
+                unique Ayurvedic constitution and creates your personalized
+                wellness profile.
+              </p>
+            </div>
+            <div class="step-visual">
+              <div class="animated-phone">
+                <div class="phone-screen">
+                  <div class="form-animation"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="step step-reverse"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
+            <div class="step-visual">
+              <div class="chat-animation">
+                <div class="chat-bubble user">Hello, I have a headache</div>
+                <div class="chat-bubble bot">
+                  Based on your symptoms and dosha...
+                </div>
+              </div>
+            </div>
+            <div class="step-content">
+              <div class="step-number">02</div>
+              <div class="step-icon">
+                <i class="fas fa-comments"></i>
+              </div>
+              <h3>Describe Your Symptoms</h3>
+              <p>
+                Simply chat with our AI assistant about your health concerns.
+                Our intelligent system understands natural language.
+              </p>
+            </div>
+          </div>
+
+          <div class="step" data-aos="fade-right" data-aos-delay="300">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <div class="step-icon">
+                <i class="fas fa-magic"></i>
+              </div>
+              <h3>Get Personalized Remedies</h3>
+              <p>
+                Receive instant, personalized Ayurvedic remedies, dietary
+                recommendations, and lifestyle advice tailored to you.
+              </p>
+            </div>
+            <div class="step-visual">
+              <div class="remedy-showcase">
+                <div class="remedy-container">
+                  <div class="remedy-header">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <span>Personalized Remedies</span>
+                  </div>
+                  <div class="remedy-list">
+                    <div class="remedy-item">
+                      <div class="remedy-icon">🌿</div>
+                      <div class="remedy-details">
+                        <h5>Ginger Tea</h5>
+                        <p>2-3 cups daily</p>
+                      </div>
+                      <div class="remedy-status">✓</div>
+                    </div>
+                    <div class="remedy-item">
+                      <div class="remedy-icon">🧘‍♀️</div>
+                      <div class="remedy-details">
+                        <h5>Pranayama</h5>
+                        <p>10 min morning</p>
+                      </div>
+                      <div class="remedy-status">✓</div>
+                    </div>
+                    <div class="remedy-item">
+                      <div class="remedy-icon">🥗</div>
+                      <div class="remedy-details">
+                        <h5>Pitta Diet</h5>
+                        <p>Cooling foods</p>
+                      </div>
+                      <div class="remedy-status">✓</div>
+                    </div>
+                  </div>
+                  <div class="remedy-footer">
+                    <div class="progress-bar">
+                      <div class="progress-fill"></div>
+                    </div>
+                    <span class="progress-text">3 of 3 remedies active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">
+            <i class="fas fa-heart"></i>
+            <span>User Reviews</span>
+          </div>
+          <h2 class="section-title">What Our Users Say</h2>
+          <p class="section-description">
+            Thousands of people have transformed their health with CureVerse
+          </p>
+        </div>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card" data-aos="zoom-in" data-aos-delay="100">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "CureVerse changed my life! The personalized remedies helped me
+              overcome chronic digestive issues that doctors couldn't solve for
+              years."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1494790108755-2616b7b3c8e0?w=100&h=100&fit=crop&crop=face"
+                  alt="Sarah Johnson"
+                />
+              </div>
+              <div class="author-info">
+                <h4>Sarah Johnson</h4>
+                <span>Yoga Instructor, California</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" data-aos="zoom-in" data-aos-delay="200">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "The AI is incredibly accurate! It understood my dosha better than
+              I did and provided remedies that actually work. Highly
+              recommended!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+                  alt="Michael Chen"
+                />
+              </div>
+              <div class="author-info">
+                <h4>Michael Chen</h4>
+                <span>Software Engineer, New York</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" data-aos="zoom-in" data-aos-delay="300">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "As a healthcare professional, I'm impressed by the depth of
+              knowledge and accuracy. It's like having an Ayurvedic expert
+              available 24/7."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face"
+                  alt="Dr. Priya Sharma"
+                />
+              </div>
+              <div class="author-info">
+                <h4>Dr. Priya Sharma</h4>
+                <span>Ayurvedic Physician, India</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content" data-aos="fade-up">
+          <div class="cta-badge">
+            <i class="fas fa-seedling"></i>
+            <span>Begin Your Healing Journey Today</span>
+          </div>
+          <h2>Ready to Experience Natural Wellness?</h2>
+          <p>
+            Join thousands who have transformed their health through the perfect
+            harmony of ancient Ayurvedic wisdom and modern AI intelligence
+          </p>
+
+          <div class="cta-buttons">
+            <a href="/register" class="btn-primary large">
+              <span>Start Your Wellness Journey</span>
+              <i class="fas fa-leaf"></i>
+            </a>
+            <a href="/login" class="btn-secondary large">
+              <span>Sign In to Continue</span>
+            </a>
+          </div>
+
+          <div class="cta-features">
+            <div class="cta-feature">
+              <i class="fas fa-check-circle"></i>
+              <span>Free Forever Plan</span>
+            </div>
+            <div class="cta-feature">
+              <i class="fas fa-check-circle"></i>
+              <span>No Credit Card Required</span>
+            </div>
+            <div class="cta-feature">
+              <i class="fas fa-check-circle"></i>
+              <span>Instant Access</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <img
+                src="{{ url_for('static', filename='img/logo.svg') }}"
+                alt="CureVerse Logo"
+              />
+              <span>CureVerse</span>
+            </div>
+            <p>
+              Transforming healthcare through the perfect fusion of ancient
+              Ayurvedic wisdom and modern AI technology.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-links">
+            <div class="footer-left">
+              <div class="footer-column">
+                <h4>Product</h4>
+                <ul>
+                  <li><a href="#features">Features</a></li>
+                  <li><a href="#how-it-works">How It Works</a></li>
+                  <li><a href="/chat">AI Assistant</a></li>
+                  <li><a href="/dosha-analysis">Dosha Test</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="footer-right">
+              <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                  <li><a href="#about">About Us</a></li>
+                  <li><a href="#careers">Careers</a></li>
+                  <li><a href="#blog">Blog</a></li>
+                  <li><a href="#press">Press</a></li>
+                </ul>
+              </div>
+
+              <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                  <li><a href="#help">Help Center</a></li>
+                  <li><a href="#contact">Contact Us</a></li>
+                  <li><a href="#privacy">Privacy Policy</a></li>
+                  <li><a href="#terms">Terms of Service</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 CureVerse. All rights reserved. Made with ❤️ for your
+            health.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        easing: "ease-out-cubic",
+        once: true,
+      });
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+
+      // Mobile menu toggle
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("nav-menu");
+
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Counter animation
+      const counters = document.querySelectorAll(".stat-number");
+      const animateCounter = counter => {
+        const target = parseInt(counter.getAttribute("data-count"));
+        const increment = target / 100;
+        let count = 0;
+
+        const updateCounter = () => {
+          if (count < target) {
+            count += increment;
+            counter.textContent = Math.ceil(count);
+            setTimeout(updateCounter, 20);
+          } else {
+            counter.textContent = target;
+          }
+        };
+
+        updateCounter();
+      };
+
+      // Trigger counter animation when in viewport
+      const observerOptions = {
+        threshold: 0.7,
+      };
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const counter = entry.target;
+            animateCounter(counter);
+            observer.unobserve(counter);
+          }
+        });
+      }, observerOptions);
+
+      counters.forEach(counter => observer.observe(counter));
+
+      // Floating animation for hero cards
+      document.querySelectorAll(".floating-card").forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.5}s`;
+      });
+
+      // Particle animation
+      function createParticle() {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        particle.style.left = Math.random() * 100 + "%";
+        particle.style.animationDuration = Math.random() * 20 + 10 + "s";
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        document.querySelector(".floating-particles").appendChild(particle);
+
+        setTimeout(() => {
+          particle.remove();
+        }, 30000);
+      }
+
+      // Create particles periodically
+      setInterval(createParticle, 3000);
+
+      // Active navigation link
+      window.addEventListener("scroll", () => {
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        let current = "";
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (scrollY >= sectionTop - 200) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+          }
+        });
+      });
+    </script>
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </body>
+</html>

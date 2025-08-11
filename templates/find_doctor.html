@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find a Doctor - CureVerse</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/modern.css') }}"
+    />
+    <style>
+      /* Override main-content to ensure proper layout */
+      .main-content {
+        padding: 1.5rem;
+      }
+
+      /* Missing sidebar styles */
+      .tagline {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      .sidebar-footer {
+        padding: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .user-details {
+        color: white;
+      }
+
+      .user-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .logout-btn {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        text-decoration: none;
+      }
+
+      .logout-btn:hover {
+        color: #e74c3c;
+      }
+
+      .find-doctor-container {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        gap: 2rem;
+        height: calc(100vh - 300px);
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .search-panel {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        height: fit-content;
+        max-height: calc(100vh - 300px);
+      }
+
+      .map-container {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        min-height: 600px;
+      }
+
+      #map {
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+        border-radius: 16px;
+      }
+
+      .search-form {
+        margin-bottom: 2rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        color: #2d5016;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #2d5016;
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: white;
+        cursor: pointer;
+      }
+
+      .search-btn {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s ease;
+      }
+
+      .search-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .results-section {
+        margin-top: 2rem;
+      }
+
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .results-count {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .doctor-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+
+      .doctor-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .doctor-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .doctor-avatar {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .doctor-info h3 {
+        margin: 0 0 0.25rem 0;
+        color: #2d5016;
+        font-weight: 600;
+      }
+
+      .doctor-specialty {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .doctor-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .detail-item i {
+        color: #2d5016;
+        width: 16px;
+      }
+
+      .doctor-actions {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn-primary-sm {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .btn-secondary-sm {
+        background: transparent;
+        color: #2d5016;
+        border: 2px solid #2d5016;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-secondary-sm:hover {
+        background: #2d5016;
+        color: white;
+      }
+
+      .location-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 50%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        z-index: 1000;
+      }
+
+      .location-btn:hover {
+        background: #f0f0f0;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+      }
+
+      .map-fallback {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 400px;
+        text-align: center;
+        color: #666;
+        background: #f8f9fa;
+        border-radius: 16px;
+      }
+
+      .map-fallback i {
+        font-size: 4rem;
+        color: #2d5016;
+        margin-bottom: 1rem;
+      }
+
+      .map-fallback h3 {
+        margin-bottom: 1rem;
+        color: #2d5016;
+      }
+
+      .sample-doctors-btn {
+        background: linear-gradient(135deg, #2d5016, #4a7c59);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: transform 0.2s ease;
+      }
+
+      .sample-doctors-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Find Doctor Responsive Styles */
+      @media (max-width: 992px) {
+        .find-doctor-container {
+          grid-template-columns: 350px 1fr;
+          gap: 1.5rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          height: calc(100vh - 70px) !important;
+          padding: 1rem;
+        }
+
+        .find-doctor-container {
+          grid-template-columns: 1fr;
+          height: auto;
+          gap: 1rem;
+          padding: 0;
+        }
+
+        .search-panel {
+          max-height: none;
+          height: auto;
+          margin: 0;
+          order: 2;
+        }
+
+        .map-container {
+          height: 400px;
+          min-height: 400px;
+          order: 1;
+        }
+
+        #map {
+          min-height: 400px;
+        }
+
+        .search-form {
+          padding: 1rem;
+        }
+
+        .form-group label {
+          font-size: 0.9rem;
+        }
+
+        .form-control {
+          padding: 0.7rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          height: calc(100vh - 60px) !important;
+          padding: 0.5rem;
+        }
+
+        .content-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .content-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .find-doctor-container {
+          gap: 0.8rem;
+        }
+
+        .map-container {
+          height: 300px;
+          min-height: 300px;
+        }
+
+        #map {
+          min-height: 300px;
+        }
+
+        .search-form {
+          padding: 0.8rem;
+        }
+
+        .form-control {
+          padding: 0.6rem;
+          font-size: 0.85rem;
+        }
+
+        .btn-primary {
+          padding: 0.6rem 1rem;
+          font-size: 0.85rem;
+        }
+
+        .doctor-card {
+          padding: 0.8rem;
+        }
+
+        .doctor-name {
+          font-size: 1rem;
+        }
+
+        .doctor-specialty {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="CureVerse"
+            />
+            <h1>CureVerse</h1>
+          </div>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <p class="tagline">Your AI Health Assistant</p>
+        </div>
+
+        <nav class="sidebar-menu">
+          <div class="menu-section">
+            <h3 class="menu-title">AI ASSISTANT</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/" class="menu-link">
+                  <i class="fas fa-robot"></i>
+                  <span>AI Chatbot</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">AYURVEDIC TOOLS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/dosha-analysis" class="menu-link">
+                  <i class="fas fa-balance-scale"></i>
+                  <span>Dosha Analysis</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/seasonal-wellness" class="menu-link">
+                  <i class="fas fa-leaf"></i>
+                  <span>Seasonal Wellness</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/remedy-library" class="menu-link">
+                  <i class="fas fa-mortar-pestle"></i>
+                  <span>Remedy Library</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">RESOURCES</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="/health-library" class="menu-link">
+                  <i class="fas fa-book-medical"></i>
+                  <span>Health Library</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/find-doctor" class="menu-link active">
+                  <i class="fas fa-user-md"></i>
+                  <span>Find a Doctor</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-title">SETTINGS</h3>
+            <ul class="menu-items">
+              <li class="menu-item">
+                <a href="#" class="menu-link" onclick="clearChatHistory()">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Clear Chat History</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/preferences" class="menu-link">
+                  <i class="fas fa-cog"></i>
+                  <span>Preferences</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="/help-support" class="menu-link">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+              <div class="user-name">{{ user_name }}</div>
+              <div class="user-status">Premium Member</div>
+            </div>
+          </div>
+          <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="content-header">
+          <h1>Find a Doctor</h1>
+          <p>
+            Locate nearby healthcare professionals and Ayurvedic practitioners
+          </p>
+        </div>
+
+        <div class="find-doctor-container">
+          <div class="search-panel">
+            <div class="search-form">
+              <div class="form-group">
+                <label class="form-label">Location</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  id="locationInput"
+                  placeholder="Enter your location or use current location"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Specialty</label>
+                <select class="form-select" id="specialtySelect">
+                  <option value="">All Specialties</option>
+                  <option value="ayurveda">Ayurvedic Doctor</option>
+                  <option value="general">General Physician</option>
+                  <option value="cardiology">Cardiologist</option>
+                  <option value="dermatology">Dermatologist</option>
+                  <option value="orthopedic">Orthopedic</option>
+                  <option value="pediatric">Pediatrician</option>
+                  <option value="gynecology">Gynecologist</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Search Radius</label>
+                <select class="form-select" id="radiusSelect">
+                  <option value="5">5 km</option>
+                  <option value="10" selected>10 km</option>
+                  <option value="25">25 km</option>
+                  <option value="50">50 km</option>
+                </select>
+              </div>
+
+              <button class="search-btn" onclick="searchDoctors()">
+                <i class="fas fa-search"></i>
+                Search Doctors
+              </button>
+            </div>
+
+            <div class="results-section">
+              <div class="results-header">
+                <h3>Search Results</h3>
+                <span class="results-count" id="resultsCount"
+                  >0 doctors found</span
+                >
+              </div>
+
+              <div id="doctorsList">
+                <div class="no-results">
+                  <i
+                    class="fas fa-search"
+                    style="font-size: 3rem; color: #ddd; margin-bottom: 1rem"
+                  ></i>
+                  <p>Enter your location and search to find nearby doctors</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="map-container">
+            <button
+              class="location-btn"
+              onclick="getCurrentLocation()"
+              title="Use current location"
+            >
+              <i class="fas fa-crosshairs"></i>
+            </button>
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw&libraries=places&callback=initMap"
+      onerror="handleMapError()"
+    ></script>
+
+    <script>
+      let map;
+      let service;
+      let infoWindow;
+      let markers = [];
+      let userLocation = null;
+      let mapLoaded = false;
+
+      // Set a timeout to show fallback if Google Maps doesn't load within 10 seconds
+      setTimeout(() => {
+        if (!mapLoaded) {
+          console.log("Google Maps loading timeout, showing fallback");
+          showMapFallback();
+        }
+      }, 10000);
+
+      function handleMapError() {
+        console.error("Google Maps failed to load");
+        showMapFallback();
+      }
+
+      function showMapFallback() {
+        const mapContainer = document.getElementById("map");
+        mapContainer.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #666; text-align: center; padding: 2rem;">
+            <i class="fas fa-map-marked-alt" style="font-size: 4rem; margin-bottom: 1rem; color: #2d5016;"></i>
+            <h3 style="margin-bottom: 1rem; color: #2d5016;">Map Temporarily Unavailable</h3>
+            <p style="margin-bottom: 2rem;">The interactive map is currently unavailable. You can still search for doctors using the form on the left.</p>
+            <button onclick="loadSampleDoctors()" style="background: #2d5016; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">
+              Show Sample Doctors
+            </button>
+          </div>
+        `;
+      }
+
+      function initMap() {
+        try {
+          // Default location (Delhi, India)
+          const defaultLocation = { lat: 28.6139, lng: 77.209 };
+
+          map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: defaultLocation,
+            styles: [
+              {
+                featureType: "poi.medical",
+                elementType: "geometry",
+                stylers: [{ color: "#2d5016" }],
+              },
+            ],
+          });
+
+          infoWindow = new google.maps.InfoWindow();
+          service = new google.maps.places.PlacesService(map);
+          mapLoaded = true;
+
+          // Try to get user's current location
+          getCurrentLocation();
+        } catch (error) {
+          console.error("Error initializing map:", error);
+          showMapFallback();
+        }
+      }
+
+      // Fallback function to show sample doctors
+      function loadSampleDoctors() {
+        const sampleDoctors = [
+          {
+            name: "Dr. Rajesh Kumar - Ayurvedic Clinic",
+            specialty: "Ayurvedic Doctor",
+            address: "123 Health Street, Delhi",
+            rating: "4.5",
+            status: "Open now",
+            phone: "+91-9876543210",
+          },
+          {
+            name: "City General Hospital",
+            specialty: "Multi-specialty Hospital",
+            address: "456 Medical Avenue, Delhi",
+            rating: "4.2",
+            status: "24/7 Open",
+            phone: "+91-9876543211",
+          },
+          {
+            name: "Dr. Priya Sharma - Wellness Center",
+            specialty: "Holistic Medicine",
+            address: "789 Wellness Road, Delhi",
+            rating: "4.7",
+            status: "Open now",
+            phone: "+91-9876543212",
+          },
+        ];
+
+        displaySampleDoctors(sampleDoctors);
+      }
+
+      function displaySampleDoctors(doctors) {
+        const doctorsList = document.getElementById("doctorsList");
+        const resultsCount = document.getElementById("resultsCount");
+
+        resultsCount.textContent = `${doctors.length} sample locations`;
+        doctorsList.innerHTML = "";
+
+        doctors.forEach((doctor, index) => {
+          const card = createSampleDoctorCard(doctor, index);
+          doctorsList.appendChild(card);
+        });
+      }
+
+      function createSampleDoctorCard(doctor, index) {
+        const card = document.createElement("div");
+        card.className = "doctor-card";
+
+        card.innerHTML = `
+          <div class="doctor-header">
+            <div class="doctor-avatar">
+              <i class="fas fa-hospital"></i>
+            </div>
+            <div class="doctor-info">
+              <h3>${doctor.name}</h3>
+              <div class="doctor-specialty">${doctor.specialty}</div>
+            </div>
+          </div>
+
+          <div class="doctor-details">
+            <div class="detail-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>${doctor.address}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-star"></i>
+              <span>⭐ ${doctor.rating}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-clock"></i>
+              <span>🟢 ${doctor.status}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-phone"></i>
+              <span>${doctor.phone}</span>
+            </div>
+          </div>
+
+          <div class="doctor-actions">
+            <button class="btn-primary-sm" onclick="alert('Directions feature would open Google Maps')">
+              <i class="fas fa-directions"></i>
+              Directions
+            </button>
+            <button class="btn-secondary-sm" onclick="alert('More details about ${doctor.name}')">
+              <i class="fas fa-info-circle"></i>
+              Details
+            </button>
+          </div>
+        `;
+
+        return card;
+      }
+
+      function getCurrentLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+              map.setCenter(userLocation);
+
+              // Add marker for user location
+              new google.maps.Marker({
+                position: userLocation,
+                map: map,
+                title: "Your Location",
+                icon: {
+                  url:
+                    "data:image/svg+xml;charset=UTF-8," +
+                    encodeURIComponent(`
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="8" fill="#2d5016"/>
+                                        <circle cx="12" cy="12" r="3" fill="white"/>
+                                    </svg>
+                                `),
+                  scaledSize: new google.maps.Size(24, 24),
+                },
+              });
+
+              // Update location input
+              const geocoder = new google.maps.Geocoder();
+              geocoder.geocode(
+                { location: userLocation },
+                (results, status) => {
+                  if (status === "OK" && results[0]) {
+                    document.getElementById("locationInput").value =
+                      results[0].formatted_address;
+                  }
+                }
+              );
+            },
+            error => {
+              console.error("Error getting location:", error);
+              alert(
+                "Unable to get your current location. Please enter your location manually."
+              );
+            }
+          );
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function searchDoctors() {
+        const location = document.getElementById("locationInput").value;
+        const specialty = document.getElementById("specialtySelect").value;
+        const radius =
+          parseInt(document.getElementById("radiusSelect").value) * 1000; // Convert to meters
+
+        if (!location) {
+          alert("Please enter a location");
+          return;
+        }
+
+        // Show loading
+        document.getElementById("doctorsList").innerHTML =
+          '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Searching for doctors...</p></div>';
+
+        // If map is not loaded, show sample doctors
+        if (!mapLoaded || !window.google) {
+          setTimeout(() => {
+            loadSampleDoctors();
+          }, 1000);
+          return;
+        }
+
+        // Clear existing markers
+        clearMarkers();
+
+        // Geocode the location
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: location }, (results, status) => {
+          if (status === "OK") {
+            const searchLocation = results[0].geometry.location;
+            map.setCenter(searchLocation);
+
+            // Search for hospitals and doctors
+            const request = {
+              location: searchLocation,
+              radius: radius,
+              type: ["hospital", "doctor"],
+              keyword: specialty || "doctor hospital clinic",
+            };
+
+            service.nearbySearch(request, (results, status) => {
+              if (status === google.maps.places.PlacesServiceStatus.OK) {
+                displayDoctors(results);
+                addMarkersToMap(results);
+              } else {
+                document.getElementById("doctorsList").innerHTML =
+                  '<div class="no-results"><p>No doctors found in this area. Try expanding your search radius.</p></div>';
+              }
+            });
+          } else {
+            alert("Location not found. Please try a different location.");
+            document.getElementById("doctorsList").innerHTML =
+              '<div class="no-results"><p>Location not found. Please try again.</p></div>';
+          }
+        });
+      }
+
+      function displayDoctors(places) {
+        const doctorsList = document.getElementById("doctorsList");
+        const resultsCount = document.getElementById("resultsCount");
+
+        resultsCount.textContent = `${places.length} locations found`;
+
+        doctorsList.innerHTML = "";
+
+        places.forEach((place, index) => {
+          const doctorCard = createDoctorCard(place, index);
+          doctorsList.appendChild(doctorCard);
+        });
+      }
+
+      function createDoctorCard(place, index) {
+        const card = document.createElement("div");
+        card.className = "doctor-card";
+        card.onclick = () => focusOnMarker(index);
+
+        const rating = place.rating ? `⭐ ${place.rating}` : "No rating";
+        const openNow = place.opening_hours?.open_now
+          ? "🟢 Open now"
+          : "🔴 Closed";
+
+        card.innerHTML = `
+                <div class="doctor-header">
+                    <div class="doctor-avatar">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="doctor-info">
+                        <h3>${place.name}</h3>
+                        <div class="doctor-specialty">${place.types[0]
+                          .replace(/_/g, " ")
+                          .toUpperCase()}</div>
+                    </div>
+                </div>
+                
+                <div class="doctor-details">
+                    <div class="detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${place.vicinity}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-star"></i>
+                        <span>${rating}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${openNow}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-phone"></i>
+                        <span>${
+                          place.formatted_phone_number || "Not available"
+                        }</span>
+                    </div>
+                </div>
+                
+                <div class="doctor-actions">
+                    <button class="btn-primary-sm" onclick="getDirections('${
+                      place.place_id
+                    }')">
+                        <i class="fas fa-directions"></i>
+                        Directions
+                    </button>
+                    <button class="btn-secondary-sm" onclick="viewDetails('${
+                      place.place_id
+                    }')">
+                        <i class="fas fa-info-circle"></i>
+                        Details
+                    </button>
+                </div>
+            `;
+
+        return card;
+      }
+
+      function addMarkersToMap(places) {
+        places.forEach((place, index) => {
+          const marker = new google.maps.Marker({
+            position: place.geometry.location,
+            map: map,
+            title: place.name,
+            icon: {
+              url:
+                "data:image/svg+xml;charset=UTF-8," +
+                encodeURIComponent(`
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="16" cy="16" r="12" fill="#e76f51"/>
+                                <path d="M16 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" fill="white"/>
+                            </svg>
+                        `),
+              scaledSize: new google.maps.Size(32, 32),
+            },
+          });
+
+          marker.addListener("click", () => {
+            infoWindow.setContent(`
+                        <div style="padding: 10px;">
+                            <h3 style="margin: 0 0 10px 0; color: #2d5016;">${
+                              place.name
+                            }</h3>
+                            <p style="margin: 0 0 5px 0;"><strong>Address:</strong> ${
+                              place.vicinity
+                            }</p>
+                            <p style="margin: 0 0 5px 0;"><strong>Rating:</strong> ${
+                              place.rating ? `⭐ ${place.rating}` : "No rating"
+                            }</p>
+                            <p style="margin: 0;"><strong>Status:</strong> ${
+                              place.opening_hours?.open_now
+                                ? "🟢 Open now"
+                                : "🔴 Closed"
+                            }</p>
+                        </div>
+                    `);
+            infoWindow.open(map, marker);
+          });
+
+          markers.push(marker);
+        });
+      }
+
+      function clearMarkers() {
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+      }
+
+      function focusOnMarker(index) {
+        if (markers[index]) {
+          map.setCenter(markers[index].getPosition());
+          map.setZoom(15);
+          google.maps.event.trigger(markers[index], "click");
+        }
+      }
+
+      function getDirections(placeId) {
+        if (userLocation) {
+          const url = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/place_id:${placeId}`;
+          window.open(url, "_blank");
+        } else {
+          alert("Please allow location access to get directions");
+        }
+      }
+
+      function viewDetails(placeId) {
+        const url = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+        window.open(url, "_blank");
+      }
+
+      function clearChatHistory() {
+        if (confirm("Are you sure you want to clear your chat history?")) {
+          fetch("/api/user/clear-chat-history", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Chat history cleared successfully!");
+              } else {
+                alert("Failed to clear chat history.");
+              }
+            });
+        }
+      }
+
+      function toggleMobileMenu() {
+        const menu = document.querySelector(".sidebar-menu");
+        menu.classList.toggle("mobile-open");
+      }
+    </script>
+  </body>
+</html>
