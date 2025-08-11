@@ -183,52 +183,13 @@ def logout():
 @app.route("/dosha-analysis")
 @login_required
 def dosha_questionnaire():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("dosha_questionnaire.html", user_name=user_name)
+    return render_template("dosha_questionnaire.html")
 
 @app.route("/seasonal-wellness")
 @login_required
 def seasonal_wellness():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
     season_name, season_data = get_current_season()
-    return render_template("seasonal_wellness.html", season=season_name, season_data=season_data, user_name=user_name)
-
-@app.route("/remedy-library")
-@login_required
-def remedy_library():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("remedy_library.html", user_name=user_name)
-
-@app.route("/health-library")
-@login_required
-def health_library():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("health_library.html", user_name=user_name)
-
-@app.route("/find-doctor")
-@login_required
-def find_doctor():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("find_doctor.html", user_name=user_name)
-
-@app.route("/preferences")
-@login_required
-def preferences():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("preferences.html", user_name=user_name)
-
-@app.route("/help-support")
-@login_required
-def help_support():
-    user = get_current_user()
-    user_name = f"{user['first_name']} {user['last_name']}" if user else "Guest"
-    return render_template("help_support.html", user_name=user_name)
+    return render_template("seasonal_wellness.html", season=season_name, season_data=season_data)
 
 # Authentication API routes
 @app.route("/api/register", methods=["POST"])
@@ -333,27 +294,14 @@ def get_user_chat_history():
     try:
         user_id = request.current_user['id']
         limit = request.args.get('limit', 50, type=int)
-
+        
         history_result = user_db.get_chat_history(user_id, limit)
-
+        
         return jsonify(history_result)
-
+        
     except Exception as e:
         print(f"Chat history error: {e}")
         return jsonify({"success": False, "message": "Failed to get chat history"})
-
-@app.route("/api/user/clear-chat-history", methods=["POST"])
-@login_required
-def clear_chat_history():
-    try:
-        user_id = request.current_user['id']
-        # Add method to clear chat history in user_db
-        # For now, return success
-        return jsonify({"success": True, "message": "Chat history cleared successfully"})
-
-    except Exception as e:
-        print(f"Clear chat history error: {e}")
-        return jsonify({"success": False, "message": "Failed to clear chat history"})
 
 # Socket.IO event handler for receiving messages
 @socketio.on('send_message')
@@ -789,43 +737,18 @@ def process_symptoms(symptoms):
 
 def get_gemini_response(question):
     try:
-        # Enhanced prompt specifically focused on Ayurvedic remedies
+        # Enhance the prompt to get better medical responses
         enhanced_prompt = f"""
-        You are CureVerse AI, an expert Ayurvedic health assistant specializing in traditional Indian medicine and natural remedies.
+        Question: {question}
 
-        User Question: {question}
-
-        🌿 **IMPORTANT: Focus ONLY on Ayurvedic and natural remedies. This is your primary expertise.**
-
-        Please provide a comprehensive Ayurvedic response that includes:
-
-        ### 🕉️ Ayurvedic Analysis
-        - Analyze the condition from an Ayurvedic perspective (Vata, Pitta, Kapha doshas)
-        - Identify the root cause according to Ayurvedic principles
-
-        ### 🌿 Natural Ayurvedic Remedies
-        - Provide 3-5 specific Ayurvedic remedies using herbs, spices, and natural ingredients
-        - Include preparation methods and dosage instructions
-        - Mention traditional Ayurvedic formulations if applicable
-
-        ### 🍃 Herbal Recommendations
-        - Suggest specific Ayurvedic herbs (like Turmeric, Ashwagandha, Triphala, etc.)
-        - Explain their properties and benefits
-        - Provide usage instructions
-
-        ### 🥗 Ayurvedic Diet & Lifestyle
-        - Recommend foods that balance the affected doshas
-        - Suggest foods to avoid
-        - Include lifestyle practices (yoga, pranayama, meditation)
-
-        ### ⚠️ Important Notes
-        - Always emphasize consulting an Ayurvedic practitioner for personalized treatment
-        - Mention any contraindications or precautions
-        - Suggest when to seek medical attention
-
-        Format your response with clear markdown headers (###) and bullet points (*).
-        Focus exclusively on Ayurvedic wisdom and natural healing methods.
-        Make your response detailed, practical, and actionable.
+        Please provide a helpful, accurate, and compassionate response. If this is a medical question:
+        1. Provide factual information based on medical knowledge
+        2. Emphasize the importance of consulting healthcare professionals for diagnosis and treatment
+        3. Include relevant self-care tips if appropriate
+        4. Format your response in a clear, easy-to-read way using proper markdown
+        5. Use bullet points with single asterisks (*) for lists, not triple asterisks (***)
+        6. Use proper markdown headers (##, ###) for sections
+        7. Use **text** for bold formatting, not ***text***
         """
 
         # Generate content using the Gemini model
@@ -973,4 +896,6 @@ def submit_feedback():
     return jsonify({"status": "success", "message": "Feedback received"})
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)  # Use socketio.run instead of app.run
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    socketio.run(app, host='0.0.0.0', port=port, debug=False, allow_unsafe_werkzeug=True)  # Production settings for Render
